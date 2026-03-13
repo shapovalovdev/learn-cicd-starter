@@ -1,6 +1,6 @@
 
 
-![BADGER!](https://github.com/shapovalovdev/learn-cicd-starter/actions/workflows/ci/badge.svg)
+![BADGER!](https://github.com/shapovalovdev/learn-cicd-starter/actions/workflows/ci.yml/badge.svg)
 
 # learn-cicd-starter (Notely)
 
