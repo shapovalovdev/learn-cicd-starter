@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"net/http"
 	"testing"
 )
@@ -11,50 +12,60 @@ func TestGetAPIKey(t *testing.T) {
 		headerValue string
 		wantKey     string
 		wantErr     bool
+		errExpected error // добавим проверку конкретной ошибки
 	}{
 		{
 			name:        "missing authorization header",
 			headerValue: "",
-			wantKey:     "ApiKey abc123",
+			wantKey:     "", // при ошибке возвращается пустая строка
 			wantErr:     true,
+			errExpected: ErrNoAuthHeaderIncluded,
 		},
 		{
-			name:        "malformed authorization header",
-			headerValue: "badkey",
-			wantKey:     "ApiKey abc123",
+			name:        "malformed authorization header (no space)",
+			headerValue: "ApiKeyabc123",
+			wantKey:     "",
 			wantErr:     true,
+			errExpected: errors.New("malformed authorization header"),
+		},
+		{
+			name:        "malformed authorization header (wrong prefix)",
+			headerValue: "Bearer abc123",
+			wantKey:     "",
+			wantErr:     true,
+			errExpected: errors.New("malformed authorization header"),
 		},
 		{
 			name:        "valid api key header",
 			headerValue: "ApiKey abc123",
-			wantKey:     "ApiKey abc123",
+			wantKey:     "abc123", // функция возвращает ТОЛЬКО ключ
 			wantErr:     false,
+			errExpected: nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			headers := http.Header{}
-
 			if tt.headerValue != "" {
 				headers.Set("Authorization", tt.headerValue)
 			}
 
 			gotKey, err := GetAPIKey(headers)
 
-			if tt.wantErr {
-				if err == nil {
-					t.Fatal("expected an error, got nil")
-				}
-				return
+			// Проверка на наличие ошибки
+			if (err != nil) != tt.wantErr {
+				t.Fatalf("GetAPIKey() error = %v, wantErr %v", err, tt.wantErr)
 			}
 
-			if err != nil {
-				t.Fatalf("did not expect error, got: %v", err)
+			// Проверка текста ошибки (если она есть)
+			if tt.wantErr && err.Error() != tt.errExpected.Error() {
+				t.Errorf("expected error %v, got %v", tt.errExpected, err)
 			}
 
+			// Проверка результата
 			if gotKey != tt.wantKey {
-				t.Fatalf("expected key %q, got %q", tt.wantKey, gotKey)
+				t.Errorf("expected key %q, got %q", tt.wantKey, gotKey)
 			}
 		})
 	}
