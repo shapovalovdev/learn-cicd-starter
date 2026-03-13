@@ -19,10 +19,10 @@ jobs:
           go-version: "1.26.0"
 
       - name: Go Format
-        run: go fmt ./...
+        run: test -z $(go fmt ./...)
 
       - name: Go Lint
-        run: go vet ./...
+        run: test -z $(go vet ./...)
   tests:
     name: Tests
     runs-on: ubuntu-latest
