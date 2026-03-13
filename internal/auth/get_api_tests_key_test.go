@@ -17,7 +17,7 @@ func TestGetAPIKey(t *testing.T) {
 		{
 			name:        "missing authorization header",
 			headerValue: "",
-			wantKey:     "Error", // при ошибке возвращается пустая строка
+			wantKey:     "", // при ошибке возвращается пустая строка
 			wantErr:     true,
 			errExpected: ErrNoAuthHeaderIncluded,
 		},
