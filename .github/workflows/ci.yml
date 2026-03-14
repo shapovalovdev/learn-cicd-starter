@@ -10,8 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install staticcheck
-        run: go install honnef.co/go/tools/cmd/staticcheck@latest
       - name: Check out code
         uses: actions/checkout@v4
 
@@ -22,6 +20,8 @@ jobs:
 
       - name: Go Format
         run: test -z $(go fmt ./...)
+      - name: Install staticcheck
+        run: go install honnef.co/go/tools/cmd/staticcheck@latest
 
       - name: Go Staticcheck
         run: staticcheck ./...
