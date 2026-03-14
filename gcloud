@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Проверяем, что переданы именно "builds" и "submit"
+if [[ "$1" == "builds" && "$2" == "submit" ]]; then
+    echo "Команда 'gcloud builds submit' вызвана успешно (эмуляция)."
+    # Здесь можно добавить логику, если нужно имитировать вывод gcloud
+    exit 0
+else
+    echo "Ошибка: Неверные параметры. Ожидалось 'builds submit'."
+    exit 1
+fi
