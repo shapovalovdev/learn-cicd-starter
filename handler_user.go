@@ -56,10 +56,6 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 	respondWithJSON(w, http.StatusCreated, userResp)
 }
 
-func unused() {
-	// this function does nothing
-	// and is called nowhere
-}
 func generateRandomSHA256Hash() (string, error) {
 	randomBytes := make([]byte, 32)
 	_, err := rand.Read(randomBytes)
