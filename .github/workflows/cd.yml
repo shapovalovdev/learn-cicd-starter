@@ -22,6 +22,6 @@ jobs:
         run: ./scripts/buildprod.sh
 
       - name: Migrate database
-        run: chmod +x ./scripts/migrate.sh && ./scripts/migrate.sh
+        run: chmod +x ./scripts/migrateup.sh && ./scripts/migrateup.sh
       - name: Fake deploy
         run: chmod +x gcloud && ./gcloud builds submit
